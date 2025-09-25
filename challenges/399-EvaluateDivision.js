@@ -1,3 +1,9 @@
+/**
+ * @param {string[][]} equations
+ * @param {number[]} values
+ * @param {string[][]} queries
+ * @return {number[]}
+ */
 var calcEquation = function(equations, values, queries) {
     let graph = {};
     for (let i = 0; i < equations.length; i++) {
@@ -14,4 +20,17 @@ var calcEquation = function(equations, values, queries) {
         if (src === dst) return 1;
         visited.add(src);
         for (let [nei, val] of graph[src]) {
-            if (!
+            if (!visited.has(nei)) {
+                let res = dfs(nei, dst, visited);
+                if (res !== -1) return res * val;
+            }
+        }
+        return -1;
+    }
+
+    let ans = [];
+    for (let [a, b] of queries) {
+        ans.push(dfs(a, b, new Set()));
+    }
+    return ans;
+};
